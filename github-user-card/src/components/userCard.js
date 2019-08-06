@@ -1,18 +1,18 @@
 import React from 'react';
 
 const UserCard = props => {
-
-    const {avatarURL, name, username, email, bio, followers, following, profileurl } = props
+    console.log(props.user)
+    // const {avatar_url, name, login, email, bio, followers, following, html_url } = props.user
 
     return (
         <div>
-            <img src={avatarURL} atl='User Profile Picture'/>
-            <h2>{name}</h2>
-            <p>{username}</p>
-            <p>Contact: {email}</p>
-            <p>GitHub: {profileurl}</p>
-            <p>Bio: {bio}</p>
-            <p>Followers: {followers} Following: {following}</p>
+            <img src={props.user.avatar_url} atl='User Profile Picture'/>
+            <h2>{props.user.name}</h2>
+            <p>{props.user.login}</p>
+            <p>Contact: {props.user.email}</p>
+            <p>GitHub: {props.user.html_url}</p>
+            <p>Bio: {props.user.bio}</p>
+            <p>Followers: {props.user.followers} Following: {props.user.following}</p>
         </div>
     )
 }

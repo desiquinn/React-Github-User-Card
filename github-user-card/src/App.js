@@ -10,12 +10,16 @@ class App extends React.Component {
     super();
 
     this.state = {
-      user: null,
-      followers: null, 
-      folower: null,
+      user: {},
+      followers: [], 
+      folower: {},
     };
 
   };
+
+  componentDidMount() {
+    this.requestUser();
+  }
 
   requestUser = () => {
     fetch('https://api.github.com/users/desiquinn')
