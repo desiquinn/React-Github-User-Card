@@ -2,7 +2,7 @@ import React from 'react';
 import {Card, Icon, Image} from 'semantic-ui-react';
 
 const UserCard = props => {
-    console.log(props.user)
+    // console.log(props.user)
     // const {avatar_url, name, login, email, bio, followers, following, html_url } = props.user
 
     return (

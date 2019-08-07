@@ -1,6 +1,5 @@
 import React from 'react';
 import {Grid} from 'semantic-ui-react';
-
 import UserCard from './components/userCard.js';
 
 import './App.css';
@@ -13,24 +12,39 @@ class App extends React.Component {
     this.state = {
       user: {},
       followers: [], 
-      follower: {},
+      followerData: [],
     };
 
   };
 
   componentDidMount() {
     this.requestUser();
-    // this.requestFollowers(this.state.user.login);
-    // this.requestFollower(this.state.followers.login)
-    console.log(this.state.user)
-    // this.stat.use.login is underfined here because it's undefined when it first mounts.. how do i fixt this?
   };
 
-  componentDidUpdate() {
-    // this.requestFollowers(this.state.user.login);
-    // this.requestFollower(this.state.followers.login)
-    console.log(this.state.user.login)
-    // this.state.user.login is not underfined here, however, if i invoke the functions here it causes an infinite loop, and still doesn't generate my users.
+  componentDidUpdate(prevProps, prevState) {
+
+    // console.log("prevState", prevState)
+    // console.log("prevProps", prevProps)
+    // console.log("this.state.user", this.state.user)
+    // console.log("this.props.user", this.props.user)
+    // console.log("this.state.followers", this.state.followers)
+    // console.log("this.props.followers", this.props.followers)
+    // console.log("followerData", this.state.followerData)
+    if(this.state.user !== prevState.user) {
+      // console.log("state inside 1st condition", this.state.user)
+      // console.log("props inside 1st condition", this.props.user)
+      this.requestFollowers(this.state.user.login)
+    }
+
+    if(this.state.followers !== prevState.followers) {
+      // console.log("state inside 2nd condition", this.state.followers)
+      // console.log("props inside 2nd condition", this.props.followers)
+      this.state.followers.map((follower) => {
+        // console.log("I mapped and found", follower.login)
+        this.requestFollowerData(follower.login)
+        // console.log(this.state.followerData)
+      })
+    }
   }
 
 
@@ -53,7 +67,7 @@ class App extends React.Component {
         return response.json()
       })
       .then(followers => {
-        this.setState({followers})
+        this.setState({followers: followers})
       })
       .catch(error => {
         console.log(error)
@@ -61,13 +75,13 @@ class App extends React.Component {
   }
 
   //will need to map over followers to get this.
-  requestFollower = (follower) => {
+  requestFollowerData = (follower) => {
     fetch(`https://api.github.com/users/${follower}`)
       .then(response => {
         return response.json()
       })
       .then(follower => {
-        this.setState({follower})
+        this.setState({followerData: [...this.state.followerData, follower]})
       })
       .catch(error => {
         console.log(error)
@@ -79,11 +93,12 @@ class App extends React.Component {
       <div className="App">
         <h1>Me and My GitHub Followers</h1>
         <UserCard user={this.state.user} />
+
         <h2>My Followers</h2>
         <Grid columns={4} centered>
-        {this.state.followers.map((follower) => {
-         return <UserCard key={follower} user={this.state.follower} />
-        })}
+          {this.state.followerData.map((follower) => {
+            return <UserCard key={follower.id} user={follower} />
+          })}
         </Grid>
       </div>
     );
